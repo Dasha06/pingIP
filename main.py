@@ -1,16 +1,31 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import platform
+import subprocess
+import time
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# пинг IP адресов
+def ping_ip(ip_address):
+    try:
+        param = '-n' if platform.system().lower() == 'windows' else '-c'
+        command = ['ping', param, str(1), ip_address]
+        return subprocess.run(command, stdout=subprocess.PIPE).returncode == 0
+    except subprocess.CalledProcessError as e:
+        return False
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+server_ip_address = {'8.8.8.8': 0}
+
+
+# запуск программы
+def start():
+    while True:
+        for key in server_ip_address:
+            ping_out = ping_ip(key)
+            print(ping_out)
+            if ping_out:
+                pass
+            elif not ping_out and server_ip_address[key] < 2:
+                server_ip_address[key] += 1
+            else:
+                pass
+        time.sleep(300)
