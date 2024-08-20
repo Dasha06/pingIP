@@ -14,7 +14,7 @@ def ping_ip(ip_address):
     except subprocess.CalledProcessError as e:
         return False
 
-# в виде словаря вписать IP адресов
+# в виде словаря вписать IP адреса
 server_ip_address = {'8.8.8.8': 0}
 
 
@@ -25,13 +25,12 @@ def start():
             ping_out = ping_ip(key)
             print(ping_out)
             if ping_out:
-                pass
+                server_ip_address[key] = 0
             # добавляется единица в словаре к IP сервера если первый раз не пингуется
             elif not ping_out and server_ip_address[key] < 1:
                 server_ip_address[key] += 1
             else: # репорт что сервер не пингуется второй раз
                 win.ReportEvent('pingIP', 10112, eventType=win32evtlog.EVENTLOG_WARNING_TYPE, strings=f'Сервер {key} не пингуется!')
-                server_ip_address[key] = 0
         time.sleep(300)
 
 start()
